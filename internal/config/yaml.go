@@ -28,6 +28,7 @@ func FromYamlString(config string) (*AppConfig, error) {
 
 	out := AppConfig{
 		UpdateInterval: cfg.Options.CheckInteval,
+		Servers:        cfg.Servers,
 		Tasks:          make(map[string]Task),
 	}
 
@@ -40,6 +41,7 @@ func FromYamlString(config string) (*AppConfig, error) {
 					return nil, fmt.Errorf("error on task parse: unknown %v near %s", val, url)
 				}
 				out.Tasks[url] = &tasks.CNameTask{
+					Url:  url,
 					Name: name,
 				}
 			case "a":
@@ -48,6 +50,7 @@ func FromYamlString(config string) (*AppConfig, error) {
 					return nil, fmt.Errorf("error on task parse: unknown %v(%T) near %s", val, val, url)
 				}
 				newTask := &tasks.ATask{
+					Url:     url,
 					Records: make([]string, len(ips)),
 				}
 				for idx, ip := range ips {

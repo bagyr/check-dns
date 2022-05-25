@@ -40,8 +40,12 @@ dns_servers:
 		t.Fatalf("task %s not found", cNameUrl)
 	}
 
-	if _, ok := appConf.Tasks[cNameUrl].(*tasks.CNameTask); !ok {
+	cNameTask, ok := appConf.Tasks[cNameUrl].(*tasks.CNameTask)
+	if !ok {
 		t.Errorf("wrong task type: %T", appConf.Tasks[cNameUrl])
+	}
+	if cNameTask.Url != cNameUrl {
+		t.Errorf("wrong task url: %s", cNameTask.Url)
 	}
 
 	aRecordUrl := "prod-some-lb.some-dns.org"
